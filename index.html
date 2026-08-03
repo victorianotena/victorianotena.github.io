@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Victoriano Tena Rodríguez — Application Support &amp; Business Intelligence</title>
+<meta name="description" content="Application support and business intelligence. Eight years across ETRM energy trading platforms and EU regulatory compliance.">
+<meta property="og:title" content="Victoriano Tena Rodríguez">
+<meta property="og:description" content="Application Support &amp; Business Intelligence · ETRM · Energy Trading · SQL · EU Regulatory Compliance">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://victorianotena.github.io/">
+<meta property="og:image" content="https://victorianotena.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Victoriano Tena Rodríguez — Application Support &amp; Business Intelligence">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f8f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c1210" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='8' fill='%230b6e4f'/><text y='69' x='50' text-anchor='middle' font-size='50' font-family='Georgia,serif' font-weight='700' fill='%23f7f8f6'>VT</text></svg>">
+<script>
+  // Antes del primer pintado: evita el parpadeo de tema y de idioma.
+  try{
+    var t=localStorage.getItem('vt-theme');
+    if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);
+    var l=localStorage.getItem('vt-lang');
+    if(l==='es'||l==='en')document.documentElement.lang=l;
+  }catch(e){}
+</script>
+<style>
+  /* ---- tokens ------------------------------------------------------- */
+  :root{
+    --paper:#f7f8f6;
+    --surface:#ffffff;
+    --ink:#14201c;
+    --ink-soft:#31423b;
+    --muted:#5c6b65;
+    --line:#dce3de;
+    --line-soft:#e9eeeb;
+    --accent:#0b6e4f;
+    --accent-ink:#0b6e4f;
+    --accent-soft:rgba(11,110,79,.09);
+    --shadow:0 1px 2px rgba(20,32,28,.05);
+
+    --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,"Cascadia Mono",Consolas,"SFMono-Regular",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0c1210;
+      --surface:#121a17;
+      --ink:#e7eeea;
+      --ink-soft:#c3d0ca;
+      --muted:#8fa39a;
+      --line:#223029;
+      --line-soft:#1a2420;
+      --accent:#3fcf8e;
+      --accent-ink:#3fcf8e;
+      --accent-soft:rgba(63,207,142,.10);
+      --shadow:none;
+    }
+  }
+  :root[data-theme="light"]{
+    --paper:#f7f8f6; --surface:#ffffff; --ink:#14201c; --ink-soft:#31423b;
+    --muted:#5c6b65; --line:#dce3de; --line-soft:#e9eeeb;
+    --accent:#0b6e4f; --accent-ink:#0b6e4f; --accent-soft:rgba(11,110,79,.09);
+    --shadow:0 1px 2px rgba(20,32,28,.05);
+  }
+  :root[data-theme="dark"]{
+    --paper:#0c1210; --surface:#121a17; --ink:#e7eeea; --ink-soft:#c3d0ca;
+    --muted:#8fa39a; --line:#223029; --line-soft:#1a2420;
+    --accent:#3fcf8e; --accent-ink:#3fcf8e; --accent-soft:rgba(63,207,142,.10);
+    --shadow:none;
+  }
+
+  /* ---- base --------------------------------------------------------- */
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font:16px/1.5 var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent-soft);color:var(--ink)}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+  .page{
+    max-width:1080px;margin:0 auto;
+    padding:clamp(24px,5vw,64px) clamp(20px,5vw,48px) 64px;
+    display:grid;grid-template-columns:1fr;gap:clamp(32px,5vw,56px);
+  }
+  @media (min-width:900px){
+    .page{grid-template-columns:300px minmax(0,1fr);gap:64px;align-items:start}
+    .rail{position:sticky;top:clamp(24px,5vw,64px)}
+  }
+
+  /* ---- identity rail ------------------------------------------------ */
+  .toolbar{display:flex;gap:8px;align-items:center;margin-bottom:24px}
+  .toolbar button{
+    background:transparent;border:1px solid var(--muted);color:var(--muted);
+    font:600 12px/1 var(--mono);letter-spacing:.1em;
+    padding:8px 12px;border-radius:2px;cursor:pointer;
+    transition:color .15s,border-color .15s,background .15s;
+  }
+  .toolbar button:hover{color:var(--ink);border-color:var(--muted)}
+  .toolbar button[aria-pressed="true"]{
+    background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink);
+  }
+  .toolbar .spacer{flex:1}
+  .sr{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
+  #theme{font-size:16px;padding:8px 12px;line-height:1}
+  /* dedos, no raton: areas tactiles de 44px */
+  @media (pointer:coarse),(max-width:620px){
+    .toolbar button{min-height:44px;min-width:44px;padding:0 14px}
+    #theme{padding:0 12px}
+  }
+
+  .avatar{
+    width:64px;height:64px;border-radius:2px;object-fit:cover;object-position:center top;
+    border:1px solid var(--line);margin-bottom:20px;display:block;filter:saturate(.9);
+  }
+  h1{
+    font:400 clamp(32px,4.4vw,40px)/1.1 var(--serif);
+    letter-spacing:-.015em;margin:0;text-wrap:balance;
+  }
+  .rule{
+    height:2px;margin:20px 0;
+    background:
+      linear-gradient(var(--accent),var(--accent)) left top/32px 2px no-repeat,
+      repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 9px) left top/100% 2px no-repeat;
+  }
+  .role{font-size:16px;font-weight:600;line-height:1.4;margin:0 0 10px}
+  .kw{
+    font:12px/1.8 var(--mono);letter-spacing:.11em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 24px;
+  }
+
+  .links{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+  a.link{
+    display:flex;align-items:baseline;gap:12px;
+    padding:12px 2px;border-bottom:1px solid var(--line);
+    text-decoration:none;font-size:16px;font-weight:600;
+    transition:padding-left .15s,color .15s;
+  }
+  a.link:hover{padding-left:8px;color:var(--accent-ink)}
+  a.link .tag{
+    font:12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);flex:0 0 auto;width:24px;
+  }
+  a.link:hover .tag{color:var(--accent-ink)}
+  a.link .sub{margin-left:auto;font:400 12px/1 var(--mono);color:var(--muted);text-align:right}
+
+  /* ---- sections ----------------------------------------------------- */
+  section{margin:0 0 clamp(40px,5vw,56px)}
+  section:last-of-type{margin-bottom:32px}
+  .label{
+    font:600 12px/1.4 var(--mono);letter-spacing:.19em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 20px;display:flex;align-items:center;gap:12px;
+  }
+  .label::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .lede{
+    font:400 clamp(18px,2.2vw,20px)/1.5 var(--serif);
+    color:var(--ink);margin:0 0 20px;max-width:26em;text-wrap:pretty;
+  }
+  p.bio{margin:0 0 16px;max-width:64ch;color:var(--ink-soft)}
+  p.bio:last-child{margin-bottom:0}
+
+  /* ledger rows */
+  .row{
+    display:grid;grid-template-columns:1fr;gap:8px;
+    padding:24px 0;border-top:1px solid var(--line);
+  }
+  .row:last-child{border-bottom:1px solid var(--line)}
+  @media (min-width:620px){
+    .row{grid-template-columns:112px minmax(0,1fr);gap:0 32px}
+  }
+  .when{
+    font:12px/1.6 var(--mono);color:var(--muted);
+    font-variant-numeric:tabular-nums;letter-spacing:.04em;
+    display:flex;gap:8px;flex-wrap:wrap;
+  }
+  @media (min-width:620px){.when{display:block;padding-top:4px}}
+  .row.now .when{color:var(--accent-ink)}
+  .row h3{font:600 18px/1.35 var(--sans);margin:0 0 4px;color:var(--ink)}
+  .org{font:12px/1.6 var(--mono);color:var(--muted);margin:0 0 12px}
+  .row p.d{margin:0;color:var(--ink-soft);max-width:62ch;font-size:16px}
+  .meta{
+    list-style:none;display:flex;flex-wrap:wrap;gap:8px;
+    margin:16px 0 0;padding:0;
+  }
+  .meta li{
+    font:12px/1 var(--mono);color:var(--muted);
+    border:1px solid var(--line);border-radius:2px;padding:8px 12px;
+    background:var(--surface);
+  }
+  .now-tag{
+    display:inline-block;font:600 12px/1 var(--mono);letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent-ink);
+    border:1px solid var(--accent);border-radius:2px;
+    padding:4px 8px;background:var(--accent-soft);
+  }
+  @media (min-width:620px){.now-tag{margin-top:8px}}
+
+  /* stack table */
+  .stack{display:grid;gap:0;border-top:1px solid var(--line)}
+  .grp{
+    display:grid;grid-template-columns:1fr;gap:8px;
+    padding:16px 0;border-bottom:1px solid var(--line);
+  }
+  @media (min-width:620px){
+    .grp{grid-template-columns:152px minmax(0,1fr);gap:0 32px;align-items:baseline}
+  }
+  .grp dt{
+    font:600 12px/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);
+  }
+  .grp dd{margin:0;font-size:16px;color:var(--ink-soft);line-height:1.5;max-width:62ch}
+  .grp dd b{font-weight:600;color:var(--ink)}
+
+  footer{
+    border-top:1px solid var(--line);padding-top:20px;
+    font:12px/1.8 var(--mono);color:var(--muted);
+    display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;
+  }
+
+  /* ---- bilingual ---------------------------------------------------- */
+  /* Sin 'revert': no toca el display del elemento visible, asi que no pisa
+     reglas como .now-tag{display:inline-block}. El HTML nace con lang="en". */
+  html[lang="en"] [data-es],
+  html[lang="es"] [data-en]{display:none}
+
+  /* ---- load sequence ------------------------------------------------ */
+  .fade{animation:rise .55s cubic-bezier(.22,.7,.3,1) both}
+  .rail{animation-delay:.02s}
+  main>section:nth-of-type(1){animation-delay:.1s}
+  @keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+  /* .reveal solo lo pone el script: sin JS todo se ve igualmente */
+  .reveal{opacity:0;transform:translateY(10px)}
+  .reveal.in{
+    opacity:1;transform:none;
+    transition:opacity .5s ease,transform .5s cubic-bezier(.22,.7,.3,1);
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+  @media print{
+    /* los tokens oscuros sobreviven a la impresion: hay que reponerlos */
+    :root,:root[data-theme="dark"],:root[data-theme="light"]{
+      --paper:#fff;--surface:#fff;--ink:#000;--ink-soft:#222;
+      --muted:#444;--line:#999;--line-soft:#ccc;
+      --accent:#0b6e4f;--accent-ink:#0b6e4f;--accent-soft:transparent;
+    }
+    .toolbar,.avatar{display:none}
+    body{background:#fff;color:#000}
+    .page{display:block;max-width:none;padding:0}
+    /* el observer no corre al imprimir: sin esto el 80% del papel sale en blanco */
+    .reveal{opacity:1!important;transform:none!important}
+    .row,.grp{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ identity rail ============ -->
+  <aside class="rail fade">
+
+    <div class="toolbar">
+      <div role="group" aria-label="Language" style="display:flex;gap:6px">
+        <button type="button" data-set="en" aria-pressed="true">EN</button>
+        <button type="button" data-set="es" aria-pressed="false">ES</button>
+      </div>
+      <span class="spacer"></span>
+      <button type="button" id="theme" aria-pressed="false">
+        <span aria-hidden="true">◐</span>
+        <span class="sr" data-en lang="en">Dark theme</span><span class="sr" data-es lang="es">Tema oscuro</span>
+      </button>
+    </div>
+
+    <img class="avatar" src="photo.jpg" alt="" width="60" height="60">
+
+    <h1>Victoriano <br>Tena Rodríguez</h1>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <p class="role">
+      <span data-en lang="en">Application Support &amp; Business Intelligence</span>
+      <span data-es lang="es">Soporte de Aplicaciones y Business Intelligence</span>
+    </p>
+
+    <p class="kw">
+      <span data-en lang="en">ETRM · Energy Trading · SQL · EU Regulatory Compliance</span>
+      <span data-es lang="es">ETRM · Trading Energético · SQL · Normativa UE</span>
+    </p>
+
+    <nav class="links">
+      <a class="link" href="https://www.linkedin.com/in/victorianotena" target="_blank" rel="noopener">
+        <span class="tag">in</span>
+        <span>LinkedIn</span>
+        <span class="sub">/victorianotena</span>
+      </a>
+      <a class="link" href="CV_Victoriano_Tena_EN.pdf" target="_blank" rel="noopener">
+        <span class="tag">pdf</span>
+        <span data-en lang="en">Curriculum vitae</span><span data-es lang="es">Curriculum vitae</span>
+        <span class="sub">EN</span>
+      </a>
+      <a class="link" href="CV_Victoriano_Tena_ES.pdf" target="_blank" rel="noopener">
+        <span class="tag">pdf</span>
+        <span data-en lang="en">Curriculum vitae</span><span data-es lang="es">Curriculum vitae</span>
+        <span class="sub">ES</span>
+      </a>
+      <a class="link" id="mail" href="#">
+        <span class="tag">@</span>
+        <span data-en lang="en">Email</span><span data-es lang="es">Correo</span>
+        <span class="sub" id="mailtxt">—</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ============ record ============ -->
+  <main>
+
+    <section class="fade">
+      <h2 class="label">
+        <span data-en lang="en">Profile</span><span data-es lang="es">Perfil</span>
+      </h2>
+
+      <p class="lede" data-en lang="en">
+        Eight years keeping running the systems where real trades get executed and settled.
+      </p>
+      <p class="lede" data-es lang="es">
+        Ocho años sosteniendo los sistemas donde se ejecutan y liquidan operaciones reales.
+      </p>
+
+      <p class="bio" data-en lang="en">
+        ETRM energy trading is my foundation — Allegro, TRITON, GTA and VESON IMOS — supporting
+        traders, operators, finance and back office, and writing my own SQL against Oracle and
+        SQL Server to validate data and trace discrepancies back to their source.
+      </p>
+      <p class="bio" data-en lang="en">
+        Alongside that, EU regulatory compliance on a SaaS platform: level 1 and 2 application
+        support across compliance modules, plus process automation and internal tooling built in
+        Power Automate, Python, JavaScript and Node.js.
+      </p>
+
+      <p class="bio" data-es lang="es">
+        Mi base son los ETRM de trading energético —Allegro, TRITON, GTA y VESON IMOS— dando
+        soporte a traders, operadores, finanzas y back office, y escribiendo mis propias consultas
+        SQL sobre Oracle y SQL Server para validar datos y trazar discrepancias hasta su origen.
+      </p>
+      <p class="bio" data-es lang="es">
+        Junto a eso, cumplimiento normativo europeo sobre una plataforma SaaS: soporte de
+        aplicaciones de nivel 1 y 2 sobre módulos regulatorios, más automatización de procesos y
+        herramientas internas construidas con Power Automate, Python, JavaScript y Node.js.
+      </p>
+    </section>
+
+    <section class="fade">
+      <h2 class="label">
+        <span data-en lang="en">Track record</span><span data-es lang="es">Trayectoria</span>
+      </h2>
+
+      <article class="row now">
+        <p class="when">2024 —
+          <span class="now-tag" data-en lang="en">now</span><span class="now-tag" data-es lang="es">actual</span>
+        </p>
+        <div>
+          <h3>Senior Technical Support Engineer</h3>
+          <p class="org">
+            <span data-en lang="en">EU regulatory compliance SaaS · Madrid</span>
+            <span data-es lang="es">SaaS de cumplimiento normativo UE · Madrid</span>
+          </p>
+          <p class="d" data-en lang="en">
+            Level 1 and 2 application support across 12+ EU compliance modules — EUDR, CSRD, CSDDD,
+            CBAM, LkSG — for around 150 internal users of a platform serving some 2,000 companies.
+            Built three internal automations and a GenAI-assisted ticket analysis tool that give
+            each support agent back 5–10 hours a month.
+          </p>
+          <p class="d" data-es lang="es">
+            Soporte de aplicaciones de nivel 1 y 2 sobre más de 12 módulos de normativa europea
+            —EUDR, CSRD, CSDDD, CBAM, LkSG— para unos 150 usuarios internos de una plataforma que
+            da servicio a cerca de 2.000 empresas. Tres automatizaciones internas y una herramienta
+            de análisis de tickets asistida por GenAI que devuelven 5–10 horas al mes a cada agente.
+          </p>
+          <ul class="meta">
+            <li><span data-en lang="en">Team of 5–8</span><span data-es lang="es">Equipo de 5–8</span></li>
+            <li>Freshdesk → Jira</li>
+            <li>Power Automate · Python · Node.js</li>
+            <li><span data-en lang="en">Working language: English</span><span data-es lang="es">Idioma de trabajo: inglés</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="row">
+        <p class="when">2020 — 2024</p>
+        <div>
+          <h3>Solutions Analyst / Solutions Assistant</h3>
+          <p class="org">Repsol Trading S.A. · everis → NTT DATA</p>
+          <p class="d" data-en lang="en">
+            TRITON, GTA and VESON IMOS in a team of two to three people. Maritime operations in
+            IMOS — voyage creation and amendment, bunker and freight cost estimates, invoicing and
+            master data — and primary point of contact between Veson and Repsol for operational
+            incidents. On TRITON, support across trading operations, position validation and
+            monthly fiscal closings.
+          </p>
+          <p class="d" data-es lang="es">
+            TRITON, GTA y VESON IMOS en un equipo de dos o tres personas. Operativa marítima en
+            IMOS —creación y modificación de viajes, estimaciones de coste de bunker y flete,
+            facturación y datos maestros— y punto de contacto principal entre Veson y Repsol para
+            incidencias operativas. En TRITON, soporte a operaciones de trading, validación de
+            posiciones y cierres fiscales mensuales.
+          </p>
+          <ul class="meta">
+            <li>ServiceNow</li>
+            <li>Oracle · SQL Server</li>
+            <li><span data-en lang="en">3 systems supported</span><span data-es lang="es">3 sistemas soportados</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="row">
+        <p class="when">2018 — 2020</p>
+        <div>
+          <h3>Solutions Assistant</h3>
+          <p class="org">Naturgy · everis</p>
+          <p class="d" data-en lang="en">
+            Allegro ETRM: pricing, calculation formulas and report generation for traders,
+            operators, finance and back office. Reviewed incorrect valuations across reports,
+            compared sources and traced bad data to its root cause; supported monthly fiscal
+            closings through settlement validation and record reconciliation.
+          </p>
+          <p class="d" data-es lang="es">
+            Allegro ETRM: precios, fórmulas de cálculo y generación de informes para traders,
+            operadores, finanzas y back office. Revisión de valuaciones erróneas en los reportes,
+            comparación de fuentes y trazado del dato incorrecto hasta su causa; apoyo a los
+            cierres fiscales mensuales con validación de asentamientos y conciliación de registros.
+          </p>
+          <ul class="meta">
+            <li>Jira</li>
+            <li>Allegro ETRM · Oracle</li>
+            <li><span data-en lang="en">Team of 3–4</span><span data-es lang="es">Equipo de 3–4</span></li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <section class="fade">
+      <h2 class="label">
+        <span data-en lang="en">Systems &amp; tools</span><span data-es lang="es">Sistemas y herramientas</span>
+      </h2>
+
+      <dl class="stack">
+        <div class="grp">
+          <dt><span data-en lang="en">ETRM &amp; trading</span><span data-es lang="es">ETRM y trading</span></dt>
+          <dd><b>Allegro</b> · <b>TRITON</b> · <b>VESON IMOS</b> · GTA · VESLINK ·
+            <span data-en lang="en">energy trading operations</span><span data-es lang="es">operativa de trading energético</span></dd>
+        </div>
+        <div class="grp">
+          <dt><span data-en lang="en">Application support</span><span data-es lang="es">Soporte de aplicaciones</span></dt>
+          <dd>
+            <span data-en lang="en">Level 1 &amp; 2 · incident management · ServiceNow · Jira · Freshdesk · stakeholder management</span>
+            <span data-es lang="es">Nivel 1 y 2 · gestión de incidencias · ServiceNow · Jira · Freshdesk · gestión de stakeholders</span>
+          </dd>
+        </div>
+        <div class="grp">
+          <dt><span data-en lang="en">Data</span><span data-es lang="es">Datos</span></dt>
+          <dd>
+            <span data-en lang="en"><b>SQL</b> (Oracle, SQL Server, T-SQL) · data validation &amp; reconciliation · root cause analysis on data · fiscal closings</span>
+            <span data-es lang="es"><b>SQL</b> (Oracle, SQL Server, T-SQL) · validación y conciliación de datos · análisis de causa raíz sobre datos · cierres fiscales</span>
+          </dd>
+        </div>
+        <div class="grp">
+          <dt><span data-en lang="en">Automation</span><span data-es lang="es">Automatización</span></dt>
+          <dd>
+            <span data-en lang="en"><b>Power Automate</b> · Python · JavaScript · Node.js · GenAI-assisted internal tooling</span>
+            <span data-es lang="es"><b>Power Automate</b> · Python · JavaScript · Node.js · herramientas internas asistidas por GenAI</span>
+          </dd>
+        </div>
+        <div class="grp">
+          <dt><span data-en lang="en">EU compliance</span><span data-es lang="es">Normativa UE</span></dt>
+          <dd>EUDR · CSRD · CSDDD · CBAM · LkSG · EU Taxonomy · NIS2</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="fade">
+      <h2 class="label">
+        <span data-en lang="en">Credentials</span><span data-es lang="es">Formación y certificación</span>
+      </h2>
+
+      <dl class="stack">
+        <div class="grp">
+          <dt>2019</dt>
+          <dd><b>Allegro Associate — Functional Certificate</b><br>
+            <span class="org" style="margin:0">Allegro Development Corp.</span></dd>
+        </div>
+        <div class="grp">
+          <dt>2023</dt>
+          <dd>
+            <span data-en lang="en"><b>Business Analysis &amp; Data Analysis Fundamentals</b></span>
+            <span data-es lang="es"><b>Fundamentos profesionales de análisis empresarial y de datos</b></span><br>
+            <span class="org" style="margin:0">Microsoft &amp; LinkedIn</span></dd>
+        </div>
+        <div class="grp">
+          <dt>2018</dt>
+          <dd>
+            <span data-en lang="en"><b>Advanced Technical Diploma — Multiplatform Application Development</b></span>
+            <span data-es lang="es"><b>Grado Superior — Desarrollo de Aplicaciones Multiplataforma</b></span><br>
+            <span class="org" style="margin:0">CampusFP Getafe</span></dd>
+        </div>
+      </dl>
+    </section>
+
+    <footer>
+      <span data-en lang="en">Spanish (native) · English (full professional) · German (basic)</span>
+      <span data-es lang="es">Español (nativo) · Inglés (profesional completo) · Alemán (básico)</span>
+      <span>Madrid, ES</span>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  // Idioma: recuerda la eleccion y respeta el idioma del navegador la primera vez.
+  var btns = document.querySelectorAll('.toolbar button[data-set]');
+  function setLang(l){
+    document.documentElement.lang = l;
+    btns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.set === l); });
+  }
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      setLang(b.dataset.set);
+      // solo se recuerda lo que el usuario elige, no lo que se dedujo del navegador
+      try { localStorage.setItem('vt-lang', b.dataset.set); } catch(e){}
+    });
+  });
+  var saved = null;
+  try { saved = localStorage.getItem('vt-lang'); } catch(e){}
+  setLang(saved === 'es' || saved === 'en' ? saved : ((navigator.language||'en').slice(0,2) === 'es' ? 'es' : 'en'));
+
+  // Tema: por defecto sigue al sistema; el boton lo fija y lo recuerda.
+  var root = document.documentElement, tbtn = document.getElementById('theme');
+  function sysDark(){ return window.matchMedia('(prefers-color-scheme: dark)').matches; }
+  function isDark(){ return (root.getAttribute('data-theme') || (sysDark() ? 'dark' : 'light')) === 'dark'; }
+  function setTheme(t){
+    if(t){ root.setAttribute('data-theme', t); } else { root.removeAttribute('data-theme'); }
+    try { t ? localStorage.setItem('vt-theme', t) : localStorage.removeItem('vt-theme'); } catch(e){}
+    tbtn.setAttribute('aria-pressed', isDark());
+  }
+  tbtn.setAttribute('aria-pressed', isDark());
+  tbtn.addEventListener('click', function(){ setTheme(isDark() ? 'light' : 'dark'); });
+
+  // Revelado al entrar en pantalla. La clase la anade el script, asi que sin JS
+  // o sin IntersectionObserver el contenido se ve normal.
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce && 'IntersectionObserver' in window) {
+    var items = document.querySelectorAll('main>section:nth-of-type(n+2) .row, main>section:nth-of-type(n+2) .grp, main>section:nth-of-type(n+2) .label');
+    items.forEach(function(el){ el.classList.add('reveal'); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+    items.forEach(function(el){ io.observe(el); });
+  }
+
+  // Email ofuscado: se compone en cliente para no servirlo en el HTML a los bots.
+  var u = 'victoriano132', d = 'gmail.com';
+  var a = document.getElementById('mail');
+  a.href = 'mailto:' + u + '@' + d;
+  document.getElementById('mailtxt').textContent = u + '@' + d;
+</script>
+</body>
+</html>
