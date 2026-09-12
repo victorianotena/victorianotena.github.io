@@ -17,7 +17,13 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f7f8f6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0c1210" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://victorianotena.github.io/">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- GitHub Pages no admite cabeceras propias: la CSP va por meta. Bloquea cualquier recurso externo. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='8' fill='%230b6e4f'/><text y='69' x='50' text-anchor='middle' font-size='50' font-family='Georgia,serif' font-weight='700' fill='%23f7f8f6'>VT</text></svg>">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <script>
   // Antes del primer pintado: evita el parpadeo de tema y de idioma.
   try{
@@ -103,7 +109,7 @@
   .toolbar button{
     background:transparent;border:1px solid var(--muted);color:var(--muted);
     font:600 12px/1 var(--mono);letter-spacing:.1em;
-    padding:8px 12px;border-radius:2px;cursor:pointer;
+    min-width:44px;min-height:44px;padding:0 14px;border-radius:2px;cursor:pointer;
     transition:color .15s,border-color .15s,background .15s;
   }
   .toolbar button:hover{color:var(--ink);border-color:var(--muted)}
@@ -115,12 +121,7 @@
     position:absolute;width:1px;height:1px;padding:0;margin:-1px;
     overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
   }
-  #theme{font-size:16px;padding:8px 12px;line-height:1}
-  /* dedos, no raton: areas tactiles de 44px */
-  @media (pointer:coarse),(max-width:620px){
-    .toolbar button{min-height:44px;min-width:44px;padding:0 14px}
-    #theme{padding:0 12px}
-  }
+  #theme{font-size:16px;padding:0 12px;line-height:1}
 
   .avatar{
     width:64px;height:64px;border-radius:2px;object-fit:cover;object-position:center top;
@@ -150,6 +151,10 @@
     transition:padding-left .15s,color .15s;
   }
   a.link:hover{padding-left:8px;color:var(--accent-ink)}
+  /* una sola accion principal: el CV en ingles es lo que un reclutador viene a hacer */
+  a.link.primary{color:var(--accent-ink);border-left:3px solid var(--accent);padding-left:10px}
+  a.link.primary .tag{color:var(--accent-ink)}
+  a.link.primary:hover{padding-left:16px}
   a.link .tag{
     font:12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
     color:var(--muted);flex:0 0 auto;width:24px;
@@ -242,15 +247,8 @@
   .rail{animation-delay:.02s}
   main>section:nth-of-type(1){animation-delay:.1s}
   @keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
-  /* .reveal solo lo pone el script: sin JS todo se ve igualmente */
-  .reveal{opacity:0;transform:translateY(10px)}
-  .reveal.in{
-    opacity:1;transform:none;
-    transition:opacity .5s ease,transform .5s cubic-bezier(.22,.7,.3,1);
-  }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none!important;transition:none!important}
-    .reveal{opacity:1;transform:none}
   }
   @media print{
     /* los tokens oscuros sobreviven a la impresion: hay que reponerlos */
@@ -262,8 +260,6 @@
     .toolbar,.avatar{display:none}
     body{background:#fff;color:#000}
     .page{display:block;max-width:none;padding:0}
-    /* el observer no corre al imprimir: sin esto el 80% del papel sale en blanco */
-    .reveal{opacity:1!important;transform:none!important}
     .row,.grp{break-inside:avoid}
   }
 </style>
@@ -308,7 +304,7 @@
         <span>LinkedIn</span>
         <span class="sub">/victorianotena</span>
       </a>
-      <a class="link" href="CV_Victoriano_Tena_EN.pdf" target="_blank" rel="noopener">
+      <a class="link primary" href="CV_Victoriano_Tena_EN.pdf" target="_blank" rel="noopener">
         <span class="tag">pdf</span>
         <span data-en lang="en">Curriculum vitae</span><span data-es lang="es">Curriculum vitae</span>
         <span class="sub">EN</span>
@@ -342,7 +338,7 @@
       </p>
 
       <p class="bio" data-en lang="en">
-        ETRM energy trading is my foundation — Allegro, TRITON, GTA and VESON IMOS — supporting
+        ETRM energy trading is my foundation: Allegro, TRITON, GTA and VESON IMOS, supporting
         traders, operators, finance and back office, and writing my own SQL against Oracle and
         SQL Server to validate data and trace discrepancies back to their source.
       </p>
@@ -370,7 +366,7 @@
       </h2>
 
       <article class="row now">
-        <p class="when">2024 —
+        <p class="when">2024 –
           <span class="now-tag" data-en lang="en">now</span><span class="now-tag" data-es lang="es">actual</span>
         </p>
         <div>
@@ -380,8 +376,8 @@
             <span data-es lang="es">SaaS de cumplimiento normativo UE · Madrid</span>
           </p>
           <p class="d" data-en lang="en">
-            Level 1 and 2 application support across 12+ EU compliance modules — EUDR, CSRD, CSDDD,
-            CBAM, LkSG — for around 150 internal users of a platform serving some 2,000 companies.
+            Level 1 and 2 application support across 12+ EU compliance modules (EUDR, CSRD, CSDDD,
+            CBAM, LkSG) for around 150 internal users of a platform serving some 2,000 companies.
             Built three internal automations and a GenAI-assisted ticket analysis tool that give
             each support agent back 5–10 hours a month.
           </p>
@@ -401,14 +397,14 @@
       </article>
 
       <article class="row">
-        <p class="when">2020 — 2024</p>
+        <p class="when">2020 – 2024</p>
         <div>
           <h3>Solutions Analyst / Solutions Assistant</h3>
           <p class="org">Repsol Trading S.A. · everis → NTT DATA</p>
           <p class="d" data-en lang="en">
             TRITON, GTA and VESON IMOS in a team of two to three people. Maritime operations in
-            IMOS — voyage creation and amendment, bunker and freight cost estimates, invoicing and
-            master data — and primary point of contact between Veson and Repsol for operational
+            IMOS: voyage creation and amendment, bunker and freight cost estimates, invoicing and
+            master data. Primary point of contact between Veson and Repsol for operational
             incidents. On TRITON, support across trading operations, position validation and
             monthly fiscal closings.
           </p>
@@ -428,7 +424,7 @@
       </article>
 
       <article class="row">
-        <p class="when">2018 — 2020</p>
+        <p class="when">2018 – 2020</p>
         <div>
           <h3>Solutions Assistant</h3>
           <p class="org">Naturgy · everis</p>
@@ -500,7 +496,7 @@
       <dl class="stack">
         <div class="grp">
           <dt>2019</dt>
-          <dd><b>Allegro Associate — Functional Certificate</b><br>
+          <dd><b>Allegro Associate – Functional Certificate</b><br>
             <span class="org" style="margin:0">Allegro Development Corp.</span></dd>
         </div>
         <div class="grp">
@@ -513,7 +509,7 @@
         <div class="grp">
           <dt>2018</dt>
           <dd>
-            <span data-en lang="en"><b>Advanced Technical Diploma — Multiplatform Application Development</b></span>
+            <span data-en lang="en"><b>Advanced Technical Diploma in Multiplatform Application Development</b></span>
             <span data-es lang="es"><b>Grado Superior — Desarrollo de Aplicaciones Multiplataforma</b></span><br>
             <span class="org" style="margin:0">CampusFP Getafe</span></dd>
         </div>
@@ -523,6 +519,8 @@
     <footer>
       <span data-en lang="en">Spanish (native) · English (full professional) · German (basic)</span>
       <span data-es lang="es">Español (nativo) · Inglés (profesional completo) · Alemán (básico)</span>
+      <span data-en lang="en">No cookies · no analytics</span>
+      <span data-es lang="es">Sin cookies · sin analítica</span>
       <span>Madrid, ES</span>
     </footer>
 
@@ -558,20 +556,6 @@
   }
   tbtn.setAttribute('aria-pressed', isDark());
   tbtn.addEventListener('click', function(){ setTheme(isDark() ? 'light' : 'dark'); });
-
-  // Revelado al entrar en pantalla. La clase la anade el script, asi que sin JS
-  // o sin IntersectionObserver el contenido se ve normal.
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reduce && 'IntersectionObserver' in window) {
-    var items = document.querySelectorAll('main>section:nth-of-type(n+2) .row, main>section:nth-of-type(n+2) .grp, main>section:nth-of-type(n+2) .label');
-    items.forEach(function(el){ el.classList.add('reveal'); });
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
-    items.forEach(function(el){ io.observe(el); });
-  }
 
   // Email ofuscado: se compone en cliente para no servirlo en el HTML a los bots.
   var u = 'victoriano132', d = 'gmail.com';
